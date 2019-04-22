@@ -6,9 +6,9 @@
 _author_ = 'FFPY'
 
 CHANNEL = 11        # 控制引脚
-OPEN_TEMP = 55      # 打开风扇的温度（度）
-CLOSE_TEMP = 40     # 关闭风扇的温度（度）
-CHECK_INTERVAL = 30 # 循环检测的间隔（秒）
+OPEN_TEMP = 60      # 打开风扇的温度（度）
+CLOSE_TEMP = 50     # 关闭风扇的温度（度）
+CHECK_INTERVAL = 20 # 循环检测的间隔（秒）
 
 import os
 import time
@@ -33,6 +33,7 @@ def check():
         GPIO.output(CHANNEL, GPIO.LOW)
 
 def loop():
+    GPIO.output(CHANNEL, GPIO.LOW)
     '''循环检测'''
     while True:
         check()
