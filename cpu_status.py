@@ -12,7 +12,7 @@ def get_cpu_temp():
 def get_cpu_used():
     '''获取CPU使用率'''
     s = os.popen("top -n 2 -b").read().strip()
-    return re.search(r"Cpu\(s\)[\w\W]*Cpu\(s\): ([\d\.]*) us", s).group(1)
+    return re.search(r"Cpu\(s\)[\w\W]*Cpu\(s\):\s*([\d\.]*) us", s).group(1)
 
 while True:
     print('使用率：%s%%\t 温度：%s°C' % (get_cpu_used(), get_cpu_temp()))
