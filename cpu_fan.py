@@ -7,8 +7,10 @@ _author_ = 'FFPY'
 
 CHANNEL = 11        # 控制引脚
 OPEN_TEMP = 60      # 打开风扇的温度（度）
-CLOSE_TEMP = 50     # 关闭风扇的温度（度）
-CHECK_INTERVAL = 20 # 循环检测的间隔（秒）
+CLOSE_TEMP = 55     # 关闭风扇的温度（度）
+CLOSE_CHECK_INTERVAL = 20 # 关状态检测的间隔（秒）
+OPEN_CHECK_INTERVAL = 600 # 开状态检测的间隔（秒）
+isOpen = False # 是否为开状态
 
 import os
 import time
@@ -28,8 +30,10 @@ def check():
     '''检测温度并控制风扇'''
     temp = get_cpu_temp()
     if temp > OPEN_TEMP:    # 高于OPEN_TEMP开风扇
+        isOpen = True
         GPIO.output(CHANNEL, GPIO.HIGH)
-    elif temp < CLOSE_TEMP: # 低于CLOSE_TEMP关风扇
+    elif temp <= CLOSE_TEMP: # 低于CLOSE_TEMP关风扇
+        isOpen = False
         GPIO.output(CHANNEL, GPIO.LOW)
 
 def loop():
@@ -37,7 +41,10 @@ def loop():
     '''循环检测'''
     while True:
         check()
-        time.sleep(CHECK_INTERVAL)   # 休眠CHECK_INTERVAL秒
+        if isOpen:
+            time.sleep(OPEN_CHECK_INTERVAL)
+        else:
+            time.sleep(CLOSE_CHECK_INTERVAL)
 
 init()
 loop()
